@@ -5,6 +5,8 @@ import time
 import docker
 import six
 
+TRIGGER_PACK = 'docker'
+
 
 class DockerSensor(object):
     def __init__(self, container_service, config=None):
@@ -14,7 +16,6 @@ class DockerSensor(object):
         self._ps_opts = None
 
         self._poll_interval = 5  # seconds
-        self._trigger_pack = 'docker'
 
     def setup(self):
         docker_opts = self._config
@@ -41,8 +42,8 @@ class DockerSensor(object):
         started_trigger  = self.get_trigger_types()[0]
         stopped_trigger = self.get_trigger_types()[1]
 
-        started_trigger_ref = '.'.join([self._trigger_pack, started_trigger['name']])
-        stopped_trigger_ref = '.'.join([self._trigger_pack, stopped_trigger['name']])
+        started_trigger_ref = '.'.join([TRIGGER_PACK, started_trigger['name']])
+        stopped_trigger_ref = '.'.join([TRIGGER_PACK, stopped_trigger['name']])
 
         while True:
             containers = self._get_active_containers()
@@ -66,11 +67,12 @@ class DockerSensor(object):
         if getattr(self._client, 'close') is not None:
             self._client.close()
 
-    def get_trigger_types(self):
+    @classmethod
+    def get_trigger_types(cls):
         return [
             {
                 'name': 'container_tracker.started',
-                'pack': self._trigger_pack,
+                'pack': TRIGGER_PACK,
                 'description': 'Trigger which indicates that a container has been started',
                 'payload_schema': {
                     'type': 'object',
@@ -83,7 +85,7 @@ class DockerSensor(object):
             },
             {
                 'name': 'container_tracker.stopped',
-                'pack': self._trigger_pack,
+                'pack': TRIGGER_PACK,
                 'description': 'Trigger which indicates that a container has been stopped',
                 'payload_schema': {
                     'type': 'object',

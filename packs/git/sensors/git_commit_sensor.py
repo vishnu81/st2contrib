@@ -10,6 +10,9 @@ import time
 
 from git.repo import Repo
 
+TRIGGER_NAME = 'head_sha_monitor'
+TRIGGER_PACK = 'git'
+
 
 class GitCommitSensor(object):
     def __init__(self, container_service, config=None):
@@ -19,9 +22,7 @@ class GitCommitSensor(object):
         self._logger = self._container_service.get_logger(__name__)
         self._old_head = None
         self._remote = None
-        self._trigger_name = 'head_sha_monitor'
-        self._trigger_pack = 'git'
-        self._trigger_ref = '.'.join([self._trigger_name, self._trigger_pack])
+        self._trigger_ref = '.'.join([TRIGGER_PACK, TRIGGER_NAME])
 
     def setup(self):
         git_opts = self._config
@@ -75,10 +76,11 @@ class GitCommitSensor(object):
     def stop(self):
         pass
 
-    def get_trigger_types(self):
+    @classmethod
+    def get_trigger_types(cls):
         return [{
-            'name': self._trigger_name,
-            'pack': self._trigger_pack,
+            'name': TRIGGER_NAME,
+            'pack': TRIGGER_PACK,
             'description': 'Stackstorm git commits tracker',
             'payload_schema': {
                 'type': 'object',

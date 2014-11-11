@@ -4,6 +4,9 @@ import time
 
 from jira.client import JIRA
 
+TRIGGER_PACK = 'jira'
+TRIGGER_NAME = 'issue_tracker'
+
 
 class JIRASensor(object):
     '''
@@ -26,9 +29,7 @@ class JIRASensor(object):
         self._project = None
         self._issues_in_project = None
         self._jql_query = None
-        self._trigger_name = 'issues_tracker'
-        self._trigger_pack = 'jira'
-        self._trigger_ref = '.'.join([self._trigger_pack, self._trigger_name])
+        self._trigger_ref = '.'.join([TRIGGER_PACK, TRIGGER_NAME])
 
     def _read_cert(self, file_path):
         with open(file_path) as f:
@@ -69,11 +70,12 @@ class JIRASensor(object):
     def stop(self):
         pass
 
-    def get_trigger_types(self):
+    @classmethod
+    def get_trigger_types(cls):
         return [
             {
-                'name': self._trigger_name,
-                'pack': self._trigger_pack,
+                'name': TRIGGER_NAME,
+                'pack': TRIGGER_PACK,
                 'description': 'JIRA issues tracker',
                 'payload_info': ['project', 'issue_name', 'issue_url', 'created', 'assignee',
                                  'fix_versions', 'issue_type']

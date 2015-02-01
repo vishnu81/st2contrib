@@ -2,3 +2,4 @@ pyyaml
 requests
 flask
 six
+newrelic>=2.42.0.35

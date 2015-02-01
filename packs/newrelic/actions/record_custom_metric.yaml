@@ -1,0 +1,19 @@
+---
+  name: "record_custom_metric"
+  runner_type: "run-python"
+  description: "Record custom application metric."
+  enabled: true
+  entry_point: "record_custom_metric.py"
+  parameters:
+    name:
+      type: "string"
+      description: "Metric name in the following format: Category/Label"
+      required: true
+    value:
+      type: "integer"
+      description: "Metric value"
+      required: true
+    application:
+      type: "string"
+      description: "Application name. If not provided, default application name from the config is used"
+      required: false

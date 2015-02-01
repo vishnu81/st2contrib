@@ -1,6 +1,7 @@
 ---
 api_url: "https://api.newrelic.com/v2/"
 api_key: ""
+app_name: "StackStorm Demo App"
 sensor_config:
     host: "0.0.0.0"
     port: 10001

@@ -16,5 +16,3 @@
             type: "object"
           text:
             type: "string"
-          timestamp:
-            type: "integer"

@@ -1,9 +1,9 @@
 ---
 name: 'solo'
-runner_type: 'run-remote-script'
+runner_type: 'run-remote'
 description: 'Performs chef-solo run on remote hosts.'
 enabled: true
-entry_point: 'chef_solo.py'
+entry_point: ''
 parameters:
     environment:
         description: 'Set the Chef Environment on the node'
@@ -24,3 +24,6 @@ parameters:
     recipe_url:
         description: 'Pull down a remote gzipped tarball of recipes and untar it to the cookbook cache'
         type: 'string'
+    cmd:
+        immutable: true
+        default: "chef-solo -j {{ attributes }} {% if recipe_url %}-r {{ recipe_url }}{% endif %} {% if environment %}-E {{ environment }}{% endif %} {% if log_level %}-l {{ log_level }}{% endif %} {% if override_runlist %}-o {{ override_runlist }}{% endif %} {% if why_run %}-W{% endif %}"

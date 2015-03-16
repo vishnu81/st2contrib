@@ -3,7 +3,7 @@ name: 'install'
 runner_type: 'run-remote-script'
 description: 'Performs installation of chef-client on remote nodes'
 enabled: true
-entry_point: 'chef_install.py'
+entry_point: 'chef_install.sh'
 parameters:
     omnibus:
         description: "Install chef-client using omnibus installer. (Always enabled, since it's the only supported way)."

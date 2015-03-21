@@ -1,0 +1,11 @@
+---
+name : rss
+description : st2 content pack containing rss / atom integrations
+keywords:
+  - rss
+  - atom
+  - feeds
+  - blogs
+version : 0.1
+author : st2-dev
+email : info@stackstorm.com

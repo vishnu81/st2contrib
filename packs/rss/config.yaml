@@ -1,2 +1,2 @@
 sensor:
-  use_published_at_filtering: true
+  use_timestamp_filtering: true

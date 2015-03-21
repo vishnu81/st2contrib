@@ -24,7 +24,7 @@ class MLStripper(HTMLParser):
 
 
 class RSSSensor(PollingSensor):
-    DATASTORE_NAME_SUFFIX = 'last_published_at'
+    DATASTORE_NAME_SUFFIX = 'last_timestamp'
 
     def __init__(self, sensor_service, config=None, poll_interval=None):
         super(RSSSensor, self).__init__(sensor_service=sensor_service,
@@ -35,7 +35,7 @@ class RSSSensor(PollingSensor):
         self._logger = self._sensor_service.get_logger(__name__)
 
         config = self._config['sensor']
-        self._use_published_at_filtering = config.get('use_published_at_filtering', True)
+        self._use_timestamp_filtering = config.get('use_timestamp_filtering', True)
 
         # Stores a list of monitored feed urls
         self._feed_urls = {}
@@ -93,49 +93,49 @@ class RSSSensor(PollingSensor):
         entries = parsed.get('entries', [])
 
         # Retrieve timestamp of the last entry (if any)
-        if self._use_published_at_filtering:
-            last_published_at_ts = self._get_last_published_at(feed_url=feed_url)
+        if self._use_timestamp_filtering:
+            last_entry_timestamp = self._get_last_entry_timestamp(feed_url=feed_url)
 
         processed_entries_count = 0
-        published_at_timestamps = []
+        entries_timestamps = []
+
         for entry in entries:
-            published_at = entry.get('published_parsed', None)
+            entry_timestamp = self._get_entry_timestamp(entry=entry)
 
-            if self._use_published_at_filtering and published_at:
-                published_at_ts = calendar.timegm(published_at)
-
-                if published_at_ts <= last_published_at_ts:
+            if self._use_timestamp_filtering and entry_timestamp:
+                if entry_timestamp <= last_entry_timestamp:
                     # We have already seen this entry, skip it
                     continue
 
-                published_at_timestamps.append(published_at_ts)
+                entries_timestamps.append(entry_timestamp)
 
             self._dispatch_trigger_for_entry(feed=feed, entry=entry)
             processed_entries_count += 1
 
         # Store timestamp of the newest entry (if any)
-        if self._use_published_at_filtering and published_at_timestamps:
-            last_published_at_ts = max(published_at_timestamps)
-            self._set_last_published_at(feed_url=feed_url, last_published_at=last_published_at_ts)
+        if self._use_timestamp_filtering and entries_timestamps:
+            last_entry_timestamp = max(entries_timestamps)
+            self._set_last_entry_timestamp(feed_url=feed_url,
+                                           timestamp=last_entry_timestamp)
 
         return processed_entries_count
 
-    def _get_last_published_at(self, feed_url):
+    def _get_last_entry_timestamp(self, feed_url):
         name = self._get_datastore_name(feed_url=feed_url)
-        last_published_at = self._sensor_service.get_value(name=name)
+        timestamp = self._sensor_service.get_value(name=name)
 
-        if last_published_at:
-            last_published_at = int(last_published_at)
+        if timestamp:
+            timestamp = int(timestamp)
 
-        return last_published_at
+        return timestamp
 
-    def _set_last_published_at(self, feed_url, last_published_at):
+    def _set_last_entry_timestamp(self, feed_url, timestamp):
         name = self._get_datastore_name(feed_url=feed_url)
 
-        if last_published_at:
-            self._sensor_service.set_value(name=name, value=str(last_published_at))
+        if timestamp:
+            self._sensor_service.set_value(name=name, value=str(timestamp))
 
-        return last_published_at
+        return timestamp
 
     def _get_datastore_name(self, feed_url):
         """
@@ -146,6 +146,25 @@ class RSSSensor(PollingSensor):
         feed_id = hashlib.md5(feed_url).hexdigest()
         name = '%s.%s' % (feed_id, self.DATASTORE_NAME_SUFFIX)
         return name
+
+    def _get_entry_timestamp(self, entry):
+        """
+        Retrieve a published / updated timestamp for the provided feed entry.
+
+        By default it tries to use "published" attribute, if this one is not
+        available, it falls back to "updated" attribute.
+        """
+        published_at = entry.get('published_parsed', None)
+        updated_at = entry.get('updated_parsed', None)
+
+        if published_at:
+            timestamp = calendar.timegm(published_at)
+        elif updated_at:
+            timestamp = calendar.timegm(updated_at)
+        else:
+            timestamp = None
+
+        return timestamp
 
     def _dispatch_trigger_for_entry(self, feed, entry):
         trigger = self._trigger_ref
@@ -161,11 +180,15 @@ class RSSSensor(PollingSensor):
         entry_title = entry.get('title', None)
         entry_author = entry.get('author', None)
         entry_published_at = entry.get('published_parsed', None)
+        entry_updated_at = entry.get('updated_parsed', None)
         entry_summary = entry.get('summary', None)
         entry_content = entry.get('content', None)
 
         if entry_published_at:
             entry_published_at = calendar.timegm(entry_published_at)
+
+        if entry_updated_at:
+            entry_updated_at = calendar.timegm(entry_updated_at)
 
         if entry_content:
             entry_content = entry_content[0].get('value', None)
@@ -187,6 +210,7 @@ class RSSSensor(PollingSensor):
                 'title': entry_title,
                 'author': entry_author,
                 'published_at_timestamp': entry_published_at,
+                'updated_at_timestamp': entry_updated_at,
                 'summary': entry_summary,
                 'content': entry_content,
                 'content_raw': entry_content_raw

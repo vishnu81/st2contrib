@@ -84,6 +84,7 @@ class RSSSensor(PollingSensor):
         self._logger.info('Removed feed: %s', feed_url)
 
     def _process_feed(self, feed_url):
+        # TODO: Also use etags and last-modified to reduce unncessary downloads
         try:
             parsed = feedparser.parse(feed_url)
         except Exception:
@@ -179,6 +180,7 @@ class RSSSensor(PollingSensor):
 
         entry_title = entry.get('title', None)
         entry_author = entry.get('author', None)
+        entry_url = entry.get('link', None)
         entry_published_at = entry.get('published_parsed', None)
         entry_updated_at = entry.get('updated_parsed', None)
         entry_summary = entry.get('summary', None)
@@ -209,6 +211,7 @@ class RSSSensor(PollingSensor):
             'entry': {
                 'title': entry_title,
                 'author': entry_author,
+                'url': entry_url,
                 'published_at_timestamp': entry_published_at,
                 'updated_at_timestamp': entry_updated_at,
                 'summary': entry_summary,

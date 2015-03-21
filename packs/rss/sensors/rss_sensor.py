@@ -46,6 +46,8 @@ class RSSSensor(PollingSensor):
     def poll(self):
         feed_urls = self._feed_urls.keys()
 
+        self._logger.info('Processing %s feeds' % (len(feed_urls)))
+
         for feed_url in feed_urls:
             self._logger.info('Processing feed: %s' % (feed_url))
             processed_entries = self._process_feed(feed_url=feed_url)

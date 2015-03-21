@@ -24,6 +24,8 @@ class MLStripper(HTMLParser):
 
 
 class RSSSensor(PollingSensor):
+    DATASTORE_NAME_SUFFIX = 'last_published_at'
+
     def __init__(self, sensor_service, config=None, poll_interval=None):
         super(RSSSensor, self).__init__(sensor_service=sensor_service,
                                         config=config,
@@ -73,7 +75,10 @@ class RSSSensor(PollingSensor):
         if feed_url in self._feed_urls:
             del self._feed_urls[feed_url]
 
-        # TODO: Cleanup datastore for this feed
+        # Clean datastore entries for the removed feed
+        name = self._get_datastore_name(feed_url=feed_url)
+        self._sensor_service.delete_value(name=name)
+
         self._logger.info('Removed feed: %s', feed_url)
 
     def _process_feed(self, feed_url):
@@ -114,8 +119,7 @@ class RSSSensor(PollingSensor):
         return processed_entries_count
 
     def _get_last_published_at(self, feed_url):
-        feed_id = hashlib.md5(feed_url).hexdigest()
-        name = '%s.last_published_at' % (feed_id)
+        name = self._get_datastore_name(feed_url=feed_url)
         last_published_at = self._sensor_service.get_value(name=name)
 
         if last_published_at:
@@ -124,13 +128,22 @@ class RSSSensor(PollingSensor):
         return last_published_at
 
     def _set_last_published_at(self, feed_url, last_published_at):
-        feed_id = hashlib.md5(feed_url).hexdigest()
-        name = '%s.last_published_at' % (feed_id)
+        name = self._get_datastore_name(feed_url=feed_url)
 
         if last_published_at:
             self._sensor_service.set_value(name=name, value=str(last_published_at))
 
         return last_published_at
+
+    def _get_datastore_name(self, feed_url):
+        """
+        Construct datastore name id for the provided feed url.
+
+        :rtype: ``str``
+        """
+        feed_id = hashlib.md5(feed_url).hexdigest()
+        name = '%s.%s' % (feed_id, self.DATASTORE_NAME_SUFFIX)
+        return name
 
     def _dispatch_trigger_for_entry(self, feed, entry):
         trigger = self._trigger_ref

@@ -1,5 +1,7 @@
 # RSS Integration Pack
 
+This pack contains integrations for RSS / Atom feeds.
+
 ## Sensors
 
 ### RSSSensor
@@ -8,15 +10,21 @@ This sensor periodically polls RSS / Atom feed for new entries and once a new
 entry is detected, a trigger is emitted.
 
 By default the sensor tries to filter out duplicated entries by using the entry
-publish timestamp - a trigger is only emitted for entries with a timestamp
-which is larger than the one we have last seen.
+"published at" / "updated at" timestamp - a trigger is only emitted for entries
+with a timestamp which is larger than the one we have last seen.
 
 Keep in mind that this approach is not perfect and it's a compromise between
-duplicated triggers and potentially missing some entries. Some blog post new
-entries with a timestamp in the past - if timestamp based filtering is enabled,
-those entries will be skipped.
+duplicated triggers and potentially missing some entries. Some blogs publish
+new entries with a timestamp in the past - if timestamp based filtering is
+enabled, those entries will be skipped / missed.
 
-TODO - this is sensor with parameters document how to configure it via cli
+Supported feed standards:
+
+* Atom 0.3
+* Atom 1.0
+* RSS 1.0
+* RSS 2.0
+* RSS 2.0 with namespaces
 
 #### rss.entry trigger
 
@@ -34,6 +42,8 @@ Example trigger payload:
         "title": "Rackspace::Solve San Francisco",
         "author": "annie",
         "published_at_timestamp": 1425549639,
+        "updated_at_timestamp": null,
+        "url": "http://stackstorm.com/2015/03/05/rackspacesolve/?utm_source=rss&utm_medium=rss&utm_campaign=rackspacesolve",
         "summary": "<p>March 4, 2015 San Francisco, CA Visit StackStorm at Boo [&#8230;]</p>\\n<p>The post <a href=\"http://stackstorm.com/2015/03/05/rackspacesolve/\" rel=\"nofollow\">Rackspace::Solve San Francisco</a> appeared first on <a href=\"http://stackstorm.com\" rel=\"nofollow\">StackStorm</a>.</p>",
         "content": "<p>March 4, 2015<br />\\nSan Francisco, CA<br />\\nVisit StackStorm at Booth #20!</p>\\n<p>During Rackspace::Solve, Rackspace will demonstrate the use of StackStorm to automate autoscaling and continuous integration and delivery pipelines, showing how StackStorm can integrate and then automate heterogeneous environments.</p>\\n<p><img alt=\"Solve\" class=\"alignnone size-medium wp-image-2661\" height=\"48\" src=\"http://stackstorm.com/wp/wp-content/uploads/2015/02/Solve-300x48.jpg\" width=\"300\" /></p>\\n<p><a href=\"http://rackspacesolve.com/sanfrancisco.html\" target=\"_blank\">EVENT WEBSITE</a></p><p>The post <a href=\"http://stackstorm.com/2015/03/05/rackspacesolve/\" rel=\"nofollow\">Rackspace::Solve San Francisco</a> appeared first on <a href=\"http://stackstorm.com\" rel=\"nofollow\">StackStorm</a>.</p>",
         "content_raw": "March 4, 2015\\nSan Francisco, CA\\nVisit StackStorm at Booth #20!\\nDuring Rackspace::Solve, Rackspace will demonstrate the use of StackStorm to automate autoscaling and continuous integration and delivery pipelines, showing how StackStorm can integrate and then automate heterogeneous environments.\\n\\nEVENT WEBSITEThe post Rackspace::Solve San Francisco appeared first on StackStorm."

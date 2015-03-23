@@ -11,7 +11,7 @@ __all__ = [
 ]
 
 
-class MLStripper(HTMLParser):
+class HTMLStripper(HTMLParser):
     def __init__(self):
         self.reset()
         self.fed = []
@@ -195,7 +195,7 @@ class RSSSensor(PollingSensor):
         if entry_content:
             entry_content = entry_content[0].get('value', None)
 
-            stripper = MLStripper()
+            stripper = HTMLStripper()
             stripper.feed(entry_content)
             entry_content_raw = stripper.get_data()
         else:

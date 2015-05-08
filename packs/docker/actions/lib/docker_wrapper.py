@@ -2,6 +2,10 @@ import sys
 import traceback
 
 from requests.packages.urllib3.exceptions import ReadTimeoutError
+try:
+    import simplejson as json
+except ImportError:
+    import json
 import six
 import docker
 
@@ -51,6 +55,7 @@ class DockerWrapper(object):
                 try:
                     json_output = six.advance_iterator(result)
                 except ReadTimeoutError:
+                    json_output = json.dumps({'status': 'Read timed out.'})
                     continue
         except StopIteration:
             pass

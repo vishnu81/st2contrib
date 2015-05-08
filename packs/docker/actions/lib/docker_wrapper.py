@@ -1,10 +1,7 @@
 import sys
+import traceback
 
-try:
-    import simplejson as json
-except:
-    import json
-
+from requests.packages.urllib3.exceptions import ReadTimeoutError
 import six
 import docker
 
@@ -23,7 +20,7 @@ class DockerWrapper(object):
 
         self._version = docker_opts['version']
         self._url = docker_opts['url']
-        self._timeout = 10
+        self._timeout = 60
         if docker_opts['timeout'] is not None:
             self._timeout = docker_opts['timeout']
         self._client = docker.Client(base_url=self._url,
@@ -44,15 +41,21 @@ class DockerWrapper(object):
         result = self._client.build(path=path, fileobj=fileobj, tag=tag, quiet=opts['quiet'],
                                     nocache=opts['nocache'], rm=opts['rm'],
                                     stream=True, timeout=opts['timeout'])
+        self._print_streamed_result(result)
+
+    def _print_streamed_result(self, result):
         try:
             json_output = six.advance_iterator(result)
             while json_output:
-                output = json.loads(json_output)
-                sys.stdout.write(output['stream'] + '\n')
-                json_output = six.advance_iterator(result)
+                sys.stdout.write(json_output)
+                try:
+                    json_output = six.advance_iterator(result)
+                except ReadTimeoutError:
+                    continue
         except StopIteration:
             pass
         except Exception as e:
+            sys.stderr.write(traceback.format_exc())
             sys.stderr.write('Error: %s' % (str(e)))
             raise e
 

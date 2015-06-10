@@ -1,0 +1,13 @@
+---
+  name: "list_channels"
+  runner_type: "run-python"
+  description: "List channels in a Slack Org"
+  enabled: true
+  entry_point: "list_channels.py"
+  parameters:
+    token:
+      type: "string"
+      description: "Slack API token."
+    exclude_archived:
+      type: "integer"
+      description: "0 to include archived channels, 1 to exclude"

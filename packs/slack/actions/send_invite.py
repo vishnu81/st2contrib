@@ -24,7 +24,7 @@ class SendInviteAction(Action):
         headers['Content-Type'] = 'application/x-www-form-urlencoded'
         body = {
             'email': email,
-            'channels': auto_join_channels,
+            'channels': " ".join(auto_join_channels),
             'first_name': first_name,
             'token': token,
             'set_active': set_active,

@@ -9,6 +9,9 @@
       type: "string"
       description: "Email address to send invitation to."
       required: true
+    first_name:
+      type: "string"
+      description: "Users first name"
     channels:
       type: "string"
       description: "Channels to auto join."

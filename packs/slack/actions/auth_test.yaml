@@ -1,0 +1,10 @@
+---
+  name: "auth_test"
+  runner_type: "run-python"
+  description: "Slack auth test"
+  enabled: true
+  entry_point: "auth_test.py"
+  parameters:
+    token:
+      type: "string"
+      description: "Slack API token."

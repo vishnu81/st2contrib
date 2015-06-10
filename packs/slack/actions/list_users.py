@@ -27,6 +27,10 @@ class ListUsersAction(Action):
         response = requests.get(url=url,
                                  headers=headers, params=data)
 
+        results = response.json()
+
+        if results['ok'] == True:
+            return results
         if response.status_code == httplib.OK:
             return response.json()
         else:

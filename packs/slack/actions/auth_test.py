@@ -27,8 +27,10 @@ class AuthTestAction(Action):
         response = requests.get(url=url,
                                  headers=headers, params=data)
 
-        if response.status_code == httplib.OK:
-            return response.json()
+        results = response.json()
+
+        if results['ok'] == True:
+            return results
         else:
             failure_reason = ('Failed to authenticate: %s \
                               (status code: %s)' % (response.text,

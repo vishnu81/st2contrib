@@ -17,7 +17,7 @@ class SendInviteAction(Action):
         set_active = set_active if set_active else config['set_active']
         attempts = attempts if attempts else config['attempts']
         auto_join_channels = config['auto_join_channels']
-        url = "https://%s..slack.com/api/users.admin.invite" % \
+        url = "https://%s.slack.com/api/users.admin.invite" % \
             config['organization']
 
         headers = {}
@@ -36,7 +36,7 @@ class SendInviteAction(Action):
                                  headers=headers, data=data)
 
         if response.status_code == httplib.OK:
-            self.logger.info('Invite successfully sent to %s' % email)
+            return 'Invite successfully sent to %s. RESPONSE: %s' % (email, response.json())
         else:
             failure_reason = ('Failed to send invite to %s: %s \
                               (status code: %s)' % (email, response.text,

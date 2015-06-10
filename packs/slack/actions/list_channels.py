@@ -1,5 +1,3 @@
-import json
-import httplib
 import urllib
 
 import requests
@@ -15,7 +13,8 @@ class ListChannelsAction(Action):
     def run(self, token, exclude_archived):
         config = self.config['list_channels_action']
         token = token if token else config['token']
-        exclude_archived = exclude_archived if exclude_archived else config['exclude_archived']
+        exclude_archived = exclude_archived if \
+            exclude_archived else config['exclude_archived']
         url = 'https://slack.com/api/channels.list'
 
         headers = {}
@@ -27,11 +26,11 @@ class ListChannelsAction(Action):
 
         data = urllib.urlencode(body)
         response = requests.get(url=url,
-                                 headers=headers, params=data)
+                                headers=headers, params=data)
 
         results = response.json()
 
-        if results['ok'] == True:
+        if results['ok'] is True:
             return results
         else:
             failure_reason = ('Failed to get channel list: %s \

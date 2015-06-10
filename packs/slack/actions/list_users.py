@@ -1,5 +1,3 @@
-import json
-import httplib
 import urllib
 
 import requests
@@ -25,14 +23,12 @@ class ListUsersAction(Action):
 
         data = urllib.urlencode(body)
         response = requests.get(url=url,
-                                 headers=headers, params=data)
+                                headers=headers, params=data)
 
         results = response.json()
 
-        if results['ok'] == True:
+        if results['ok'] is True:
             return results
-        if response.status_code == httplib.OK:
-            return response.json()
         else:
             failure_reason = ('Failed to get user list: %s \
                               (status code: %s)' % (response.text,

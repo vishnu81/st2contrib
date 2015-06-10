@@ -1,5 +1,3 @@
-import json
-import httplib
 import urllib
 
 import requests
@@ -34,11 +32,12 @@ class SendInviteAction(Action):
 
         data = urllib.urlencode(body)
         response = requests.get(url=url,
-                                 headers=headers, params=data)
+                                headers=headers, params=data)
         results = response.json()
-        
-        if results['ok'] == True:
-            return 'Invite successfully sent to %s. RESPONSE: %s' % (email, results)
+      
+        if results['ok'] is True:
+            return 'Invite successfully sent to %s. RESPONSE: %s' % \
+                (email, results)
         else:
             failure_reason = ('Failed to send invite to %s: %s \
                               (status code: %s)' % (email, response.text,

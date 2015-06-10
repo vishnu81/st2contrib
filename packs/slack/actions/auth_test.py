@@ -1,5 +1,3 @@
-import json
-import httplib
 import urllib
 
 import requests
@@ -25,11 +23,11 @@ class AuthTestAction(Action):
 
         data = urllib.urlencode(body)
         response = requests.get(url=url,
-                                 headers=headers, params=data)
+                                headers=headers, params=data)
 
         results = response.json()
 
-        if results['ok'] == True:
+        if results['ok'] is True:
             return results
         else:
             failure_reason = ('Failed to authenticate: %s \

@@ -1,0 +1,10 @@
+---
+  name: "list_users"
+  runner_type: "run-python"
+  description: "List users in a Slack Org"
+  enabled: true
+  entry_point: "list_users.py"
+  parameters:
+    token:
+      type: "string"
+      description: "Slack API token."

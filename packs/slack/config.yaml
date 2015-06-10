@@ -1,4 +1,13 @@
 ---
+# Used for auth test action
+auth_test_action:
+  token: ""
+
+# Used for list channels
+list_channels_action:
+  token: ""
+  exclude_archived: 0
+
 # Used for list users action
 list_users_action:
   token: ""
@@ -10,8 +19,7 @@ send_invite_action:
   set_active: false
   attempts: 1
   auto_join_channels:
-    - ABCDEF
-    - 12345
+    - C0123456
 
 # Used for post message action
 post_message_action:

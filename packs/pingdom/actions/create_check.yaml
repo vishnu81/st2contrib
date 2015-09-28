@@ -1,0 +1,56 @@
+---
+name: create_check
+runner_type: run-python
+description: Create a new check.
+enabled: true
+entry_point: create_check.py
+parameters:
+  name:
+    type: string
+    description: Check name.
+    required: true
+  type:
+    type: string
+    description: Check type.
+    enum:
+      - http
+      - httpcustom
+      - tcp
+      - ping
+      - dns
+      - udp
+      - smtp
+      - pop3
+      - imap
+    required: true
+  parameters:
+    type: object
+    description: Type specific check arguments.
+    required: true
+  paused:
+    type: boolean
+    description: True if the check should be paused.
+    required: false
+    default: false
+  resolution:
+    type: integer
+    description: Check resolution
+    enum:
+      - 1
+      - 5
+      - 15
+      - 30
+      - 60
+    required: false
+  tags:
+    type: array
+    description: Check tags.
+    required: false
+  send_to_email:
+    type: boolean
+    description: Send alerts as email.
+    required: false
+  send_to_sms:
+    type: boolean
+    description: Send alerts as SMS.
+    required: false

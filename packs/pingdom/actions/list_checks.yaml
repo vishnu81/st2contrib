@@ -1,0 +1,20 @@
+---
+name: list_checks
+runner_type: run-python
+description: Return a list overview of all checks.
+enabled: true
+entry_point: list_checks.py
+parameters:
+  include_tags:
+    type: boolean
+    description: True to return tag list for each check.
+    required: false
+  tags:
+    type: array
+    description: Only return checks with the provided tags.
+    required: false
+  limit:
+    type: integer
+    description: Maximum number of results to return.
+    description: Number of results returned.
+    required: false

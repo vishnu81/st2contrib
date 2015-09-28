@@ -1,0 +1,36 @@
+---
+name: list_alerts
+runner_type: run-python
+description: Returns a list of alerts (actions) that have been generated for your account.
+enabled: true
+entry_point: list_alerts.py
+parameters:
+  data:
+    type: string
+    description: CSV string to parse.
+    required: true
+  from:
+    type: integer
+    description: Optional unix timestamp for from time filter.
+    required: false
+  to:
+    type: integer
+    description: Optional unix timestamp for to time filter.
+    required: false
+  limit:
+    type: integer
+    description: Maximum number of results to return.
+    required: false
+    default: 300
+  check_ids:
+    type: array
+    description: A list of check ids to list the alerts for.
+    required: false
+  contact_ids:
+    type: array
+    description: A list of contact ids to list the alerts for.
+    required: false
+  statis:
+    type: array
+    description: A list of statuses to list the alerts for.
+    required: false

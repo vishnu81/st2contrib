@@ -1,0 +1,11 @@
+---
+name: delete_check
+runner_type: run-python
+description: Delete a check and all the associated collected data.
+enabled: true
+entry_point: delete_check.py
+parameters:
+  check_id:
+    type: string
+    description: ID of a check to delete.
+    required: true

@@ -1,0 +1,21 @@
+---
+name: list_alerts
+runner_type: run-python
+description: Returns a list of alerts (actions) that have been generated for your account.
+enabled: true
+entry_point: list_alerts.py
+parameters:
+  data:
+    type: string
+    description: CSV string to parse.
+    required: true
+  delimiter:
+    type: string
+    description: String delimiter character.
+    required: false
+    default: ","
+  quote_char:
+    type: string
+    description: Character used to quote the strings.
+    required: false
+    default: "\""

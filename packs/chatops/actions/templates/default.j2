@@ -1,0 +1,8 @@
+Action {{ execution.action.ref }} completed.
+status : {{ execution.status }}
+execution: {{ execution.id }}
+{% if execution.result %}
+result :
+--------
+{{ FORMATTERS.get(execution.runner['name'], FORMATTERS['default'])(execution.result) }}
+{% endif %}

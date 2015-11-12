@@ -8,4 +8,4 @@ formats:
 ack:
   format: "ok"
 result:
-  format: "done, here it is: {{ execution.result.stdout }}"
+  format: "done, here it is: {{ execution.result }}"

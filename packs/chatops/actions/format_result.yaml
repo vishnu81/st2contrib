@@ -6,7 +6,7 @@ description: "Format an execution result for chatops"
 enabled: true
 entry_point: "format_result.py"
 parameters:
-  execution_id:
-    type: "string"
-    description: "ID of the execution to format"
+  execution:
+    type: "object"
+    description: "Execution to format"
     required: true

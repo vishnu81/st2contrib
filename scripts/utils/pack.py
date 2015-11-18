@@ -107,7 +107,10 @@ def get_pack_resources(pack):
 
         item = {
             'name': content['name'],
-            'description': content.get('description', None)
+            'description': content.get('description', None),
+            'runner_type': content.get('runner_type', None),
+            'entry_point': content.get('entry_point', None),
+            'parameters': content.get('parameters', {})
         }
         resources['actions'].append(item)
 

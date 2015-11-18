@@ -21,101 +21,19 @@ Script which updates README.md with a list of all the available packs.
 
 import os
 import copy
-import glob
-import json
 import argparse
 
-import yaml
+from utils.pack import get_pack_list
+from utils.pack import get_pack_metadata
+from utils.pack import get_pack_resources
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 PACKS_DIR = os.path.join(CURRENT_DIR, '../packs')
 README_PATH = os.path.join(CURRENT_DIR, '../README.md')
 
-PARSER_FUNCS = {
-    '.json': json.loads,
-    '.yml': yaml.safe_load,
-    '.yaml': yaml.safe_load
-}
 
 BASE_REPO_URL = 'https://github.com/StackStorm/st2contrib'
 BASE_PACKS_URL = 'https://github.com/StackStorm/st2contrib/tree/master/packs'
-PACK_ICON_URL = 'https://raw.githubusercontent.com/StackStorm/st2contrib/master/packs/%(name)s/icon.png'
-NO_PACK_ICON_URL = 'https://raw.githubusercontent.com/StackStorm/st2contrib/master/packs/st2/icon.png'
-
-
-def get_pack_list():
-    packs = os.listdir(PACKS_DIR)
-    packs = sorted(packs)
-    return packs
-
-
-def get_pack_metadata(pack):
-    metadata_path = os.path.join(PACKS_DIR, pack, 'pack.yaml')
-    with open(metadata_path, 'r') as fp:
-        content = fp.read()
-
-    metadata = yaml.safe_load(content)
-
-    icon_path = os.path.join(PACKS_DIR, pack, 'icon.png')
-    if os.path.exists(icon_path):
-        metadata['icon_url'] = PACK_ICON_URL % {'name': pack}
-    else:
-        metadata['icon_url'] = NO_PACK_ICON_URL
-
-    return metadata
-
-
-def get_pack_resources(pack):
-    sensors_path = os.path.join(PACKS_DIR, pack, 'sensors/')
-    actions_path = os.path.join(PACKS_DIR, pack, 'actions/')
-
-    sensor_metadata_files = glob.glob(sensors_path + '/*.json')
-    sensor_metadata_files += glob.glob(sensors_path + '/*.yaml')
-    sensor_metadata_files += glob.glob(sensors_path + '/*.yml')
-
-    action_metadata_files = glob.glob(actions_path + '/*.json')
-    action_metadata_files += glob.glob(actions_path + '/*.yaml')
-    action_metadata_files += glob.glob(actions_path + '/*.yml')
-
-    resources = {
-        'sensors': [],
-        'actions': []
-    }
-
-    for sensor_metadata_file in sensor_metadata_files:
-        file_name, file_ext = os.path.splitext(sensor_metadata_file)
-
-        with open(sensor_metadata_file, 'r') as fp:
-            content = fp.read()
-
-        content = PARSER_FUNCS[file_ext](content)
-        item = {
-            'name': content['class_name'],
-            'description': content.get('description', None)
-        }
-        resources['sensors'].append(item)
-
-    for action_metadata_file in action_metadata_files:
-        file_name, file_ext = os.path.splitext(action_metadata_file)
-
-        with open(action_metadata_file, 'r') as fp:
-            content = fp.read()
-
-        content = PARSER_FUNCS[file_ext](content)
-
-        if 'name' not in content:
-            continue
-
-        item = {
-            'name': content['name'],
-            'description': content.get('description', None)
-        }
-        resources['actions'].append(item)
-
-    resources['sensors'] = sorted(resources['sensors'], key=lambda i: i['name'])
-    resources['actions'] = sorted(resources['actions'], key=lambda i: i['name'])
-
-    return resources
 
 
 def generate_pack_list_table(packs):

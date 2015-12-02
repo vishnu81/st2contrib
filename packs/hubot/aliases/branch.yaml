@@ -1,7 +1,7 @@
 ---
 name: "hubot_branch"
 action_ref: "hubot.branch"
-description: "Show the currently deployed hubot branch"
+description: "Show the currently deployed bot branch"
 formats:
-  - "hubot branch"
-  - "hubot branch on {{hosts}}"
+  - "bot branch"
+  - "bot branch on {{hosts}}"

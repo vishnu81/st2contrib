@@ -1,7 +1,7 @@
 ---
 name: "hubot_deploy"
 action_ref: "hubot.deploy"
-description: "Deploy a specific git branch of deployed Hubot"
+description: "Deploy a specific git branch of deployed bot"
 formats:
-  - "hubot deploy {{branch}}"
-  - "hubot deploy {{branch}} on {{hosts}}"
+  - "bot deploy {{branch}}"
+  - "bot deploy {{branch}} on {{hosts}}"

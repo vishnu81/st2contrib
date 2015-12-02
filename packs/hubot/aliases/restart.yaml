@@ -1,7 +1,7 @@
 ---
 name: "hubot_restart"
 action_ref: "hubot.restart"
-description: "Restart Hubot"
+description: "Restart the bot"
 formats:
-  - "hubot restart"
-  - "hubot restart on {{hosts}}"
+  - "bot restart"
+  - "bot restart on {{hosts}}"

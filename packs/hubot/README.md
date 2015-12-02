@@ -17,6 +17,6 @@ Pack that provides management/integration with Hubot
 
 ## ChatOps Aliases
 
-* `hubot branch`            -> hubot.branch
-* `hubot deploy {{branch}}` -> hubot.deploy
-* `hubot restart`           -> hubot.restart
+* `bot branch`            -> hubot.branch
+* `bot deploy {{branch}}` -> hubot.deploy
+* `bot restart`           -> hubot.restart

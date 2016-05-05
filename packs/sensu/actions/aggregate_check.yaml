@@ -12,7 +12,5 @@ parameters:
   age:
     type: string
     description: The number of seconds old an aggregate must be to be listed.
-  sudo:
-    immutable: true
   kwarg_op:
     immutable: true

@@ -14,7 +14,5 @@ parameters:
     description: ''
     default: 'yes'
     immutable: true
-  sudo:
-    immutable: true
   kwarg_op:
     immutable: true

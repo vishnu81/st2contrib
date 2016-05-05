@@ -8,12 +8,10 @@ parameters:
   limit:
     type: string
     description: The number of aggregates to return.
-    default: 
+    default:
   offset:
     type: string
     description: The number of aggregates to offset before returning items.
-    default: 
-  sudo:
-    immutable: true
+    default:
   kwarg_op:
     immutable: true

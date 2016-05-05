@@ -5,7 +5,5 @@ description: List Sensu events
 enabled: true
 entry_point: events.py
 parameters:
-  sudo:
-    immutable: true
   kwarg_op:
     immutable: true

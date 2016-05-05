@@ -15,7 +15,5 @@ parameters:
   results:
     type: string
     description: Return the raw result data
-  sudo:
-    immutable: true
   kwarg_op:
     immutable: true

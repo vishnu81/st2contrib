@@ -13,7 +13,5 @@ parameters:
     type: string
     description: The check to get information on
     required: true
-  sudo:
-    immutable: true
   kwarg_op:
     immutable: true

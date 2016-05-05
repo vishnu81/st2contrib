@@ -12,7 +12,5 @@ parameters:
     type: string
     description: The client to unsilence.
     required: true
-  sudo:
-    immutable: true
   kwarg_op:
     immutable: true
